@@ -1,0 +1,37 @@
+<!--
+	Created by wangBin on 2016/7/22.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<script src="../../../../../timeLine/js/jquery.min.js"></script>
+</head>
+<body onload="carAddressShow()">
+<div class="content">
+	<div class="wrapper">
+		<div class="main">
+			<h1 class="title"></h1>
+			<div class="year">
+				<h2 id="carNum"></h2>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 弹出框 -->
+<script type="text/javascript">
+	var request = {
+		QueryString: function (val) {
+			var uri = window.location.search;
+			var re = new RegExp("" + val + "=([^&?]*)", "ig");
+			return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+		}
+	};
+	var carNum = request.QueryString("carNum");
+	function carAddressShow(){
+		$("#carNum").text(carNum+"车辆的运行轨迹");
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+booksTypeManagement         图书分类管理
+booksMessageMaintain        图书信息维护
+booksBorrowBackRenew        借书还书续借
+booksBorrowRecordInquiries  借阅记录查询
+booksInquiries              图书查询
+booksOverdueRecordInquiries 逾期记录查询

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<script src="../../../../timeLine/js/jquery.min.js"></script>
+	<title>卫东区检察院</title>
+	<style type="text/css" media="screen">
+		/*全局*/
+
+		*{margin:0;padding: 0}
+		li{list-style: none;width: 48%;float: left;border: 1px solid #ccc; padding-bottom: 40%;margin:0.5% 0;}
+		/*公用*/
+		.border{border:1px solid #ccc}
+
+		/*局部*/
+		.main{width: 100%;height: auto}
+		.main div{margin: 0 auto;font-size: 1em;color: #000;text-align: center;font-weight: bold;}
+		.nav{width:90%;margin: 0 auto}
+		.nav-center{margin:0 auto}
+		.nav-center .A2{width:56%;padding-bottom: 7%;float: left;margin-right:1%;	}
+		.nav-center .A3{padding-bottom: 5%;width: 18%;float:left;margin-top: 2%}
+		.left .two{padding-bottom:5%;}
+		.left .a135{padding-bottom:20%}
+		.left .a140{padding-bottom:20%}
+		.center{width:90%}
+		.center>.left{width:77%;float: left}
+		.center>.right{width:22%;float:right;margin-right:1%}
+		.right li{width: 100% ;padding-bottom: 220%}
+
+		.A1{padding-bottom: 8%;width:99%}
+		.A27{clear:both;width:90%; margin:1% auto;padding-bottom: 5%}
+		.A28{width:90%; margin:1% auto;padding-bottom: 5%}
+		.A29{width: 99%; padding-bottom: 5%}
+		.two{width: 97%}
+	</style>
+</head>
+<body>
+	<div class="main ">
+		<div class="A1 border" id="A1">
+			A1
+		</div>
+		<div class="nav">
+			<div class="nav-center">
+				<div class="A2 border" id="A2">
+					A2
+				</div>
+				<div class="A3 border" id="A3">
+					A3
+				</div>
+			</div>
+		</div>
+		<div class="center">
+			<div class="left">
+				<ul>
+					<li id="A4">
+						A4
+					</li>
+					<li id="A5">
+						A5
+					</li>
+					<li class="two a50" id="A7">
+						A7
+					</li>
+					<li class="a220" id="A8">
+						A8
+					</li>
+					<li class="a220" id="A9">
+						A9
+					</li>
+					<li class="a210" id="A10">
+						A10
+					</li>
+					<li class="a210" id="A11">
+						A11
+					</li>
+					<li class="a210" id="A13">
+						A13
+					</li>
+					<li class="a210" id="A14">
+						A14
+					</li>
+					<li class="two a60" id="A15">
+						A15
+					</li>
+					<li class="two a140" id="A16">
+						A16
+					</li>
+					<li class="a135" id="A18">
+						A18
+					</li>
+					<li class="a135" id="A19">
+						A19
+					</li>
+					<li class="two a230" id="A20">
+						A20
+					</li>
+					<li class="a140" id="A22">
+						A22
+					</li>
+					<li class="a140" id="A23">
+						A23
+					</li>
+					<li class="a140" id="A24">
+						A24
+					</li>
+					<li class="a140" id="A25">
+						A25
+					</li>
+				</ul>
+			</div>
+			<div class="right" >	
+				<ul> 
+					<li class="a596" id="A6">
+						A6
+					</li>
+					<li class="a476" id="A12">
+						A12
+					</li>
+					<li class="a400" id="A17">
+						A17
+					</li>
+					<li class="a250" id="A21">
+						A21
+					</li>
+					<li class="a160" id="A26">
+						A26
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="A27 border" id="A27">
+			A27
+		</div>
+		<div class="A28 border" id="A28">
+			A28
+		</div>
+		<div class="A29 border" id="A29">
+			A29
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		var request = {
+			QueryString: function (val) {
+				var uri = window.location.search;
+				var re = new RegExp("" + val + "=([^&?]*)", "ig");
+				return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+			}
+		};
+		var flag = request.QueryString("flag");
+		if(flag != ""){
+			$.ajax({
+				type: "GET",
+				url: '/cmsProgram/queryKey.do',
+				data:{
+					flag:flag
+				},
+				success: function (data) {
+					for(var i = 0;i<data.rows.length;i++){
+						if(flag == "AKEY"){
+							var idAppend = "#" + data.rows[i].akey;
+							$(idAppend).removeAttr("style");
+							$(idAppend).attr("style","background-color:red");
+						}else if(flag == "BKEY"){
+							var idAppend = "#" + data.rows[i].bkey;
+							$(idAppend).removeAttr("style");
+							$(idAppend).attr("style","background-color:red");
+						}
+
+					}
+				},
+				// 调用出错执行的函数
+				error: function () {
+				}
+			});
+		}
+	</script>
+</body>
+</html>

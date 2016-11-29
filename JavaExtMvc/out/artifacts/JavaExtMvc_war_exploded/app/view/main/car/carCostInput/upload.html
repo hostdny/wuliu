@@ -1,0 +1,62 @@
+<!--
+	Created by wangBin on 2016/7/22.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>文件上传</title>
+    <script src="/Scripts/uploadJS/jquery-1.8.3.min.js"></script>
+    <script src="/Scripts/uploadJS/file_upload_plug-in.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var btn = $("#Button1").uploadFile({
+                url: "/attachment/upload.do",
+                fileSuffixs: ["png","bmp","jpg","tiff","gif","pcx","tga","exif","fpx","svg","psd","cdr","pcd","dxf","ufo","eps","ai","raw","jpeg","JPEG","PNG","BMP","JPG","TIFF","GIF","PCX","TGA","EXIF","FPX","SVG","PSD","CDR","PCD","DXF","UFO","EPS","AI","RAW"],
+                maximumFilesUpload: 10,//最大文件上传数
+                onComplete: function (data) {
+                    var result = jQuery.parseJSON(jQuery(data).text());
+                    if(result.resultCode == "1"){
+                        $('#attachmentIds').val(result.resultData + "," + $('#attachmentIds').val());
+                    }
+                },
+                onAllComplete: function () {
+                    alert("全部上传完成");
+                },
+                isGetFileSize: true,//是否获取上传文件大小，设置此项为true时，将在onChosen回调中返回文件fileSize和获取大小时的错误提示文本errorText
+                onChosen: function (file, obj, fileSize, errorText) {
+                    if (!errorText) {
+                        $("#file_size").text(file + "文件大小为：" + fileSize + "KB");
+                    } else {
+                        alert(errorText);
+                        return false;
+                    }
+                    return true;//返回false将取消当前选择的文件
+                },
+                perviewElementId: "fileList", //设置预览图片的元素id
+                perviewImgStyle: {width: '50px', height: '50px', border: '1px solid #ebebeb'}//设置预览图片的样式
+            });
+
+            var upload = btn.data("uploadFileData");
+
+            $("#files").click(function () {
+                upload.submitUpload();
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div style="width: 100%; height: 100%;">
+        <input id="Button1" type="button" value="选择文件"/>
+        <input id="files" type="button" value="上传"/>
+        <div id="fileList" style="margin-top: 5px; padding-top:5px; font-size: 10px; width:100%">
+        </div>
+    </div>
+    <br/>
+    <input type="hidden" id="attachmentIds" value=""/>
+    <div id="testdiv"></div>
+</body>
+</html>

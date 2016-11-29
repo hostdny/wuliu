@@ -1,0 +1,10 @@
+/**
+ * Created by zzw on 2016/7/22.
+ */
+Ext.define('ExtFrame.view.main.assets.assetsDeclaration.AssetsDeclarationModel', {
+    extend: 'Ext.app.ViewModel',
+    alias: 'viewmodel.assetsDeclarationModel',
+    data: {
+        rec: null
+    }
+})

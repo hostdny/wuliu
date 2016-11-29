@@ -1,0 +1,555 @@
+<!--
+	Created by wangBin on 2016/7/14.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title></title>
+    <link href="../../../../../timeLine/css/app.css" rel="stylesheet" type="text/css"/>
+    <script src="../../../../../timeLine/js/jquery.min.js"></script>
+</head>
+<body onload="timeLineUlShow()">
+<div>
+    <div class="showCss">
+        <div style="padding-top: 2px" id="showColour">
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="wrapper">
+        <div class="main">
+            <h1 class="title"></h1>
+
+            <div class="year">
+                <h2></h2>
+
+                <div class="list">
+                    <ul id="timeLineUl">
+
+                    </ul>
+                </div>
+                <p class="star"><img src="../../../../../timeLine/images/jd.png"/></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-overlay">
+    <div class="modal-data">
+        <p class="modal-data_title">拒绝理由</p>
+
+        <div class="formbtnc">
+            <textarea class=".formbtnct" rows="3" cols="20" style="width:100%;height:150px;resize: none"
+                      id="overlayData"></textarea>
+
+            <div class="formbtn modal-formbtn">
+                <p><span> <button onclick="overlayText()">提交</button> <button onclick="overlay()">关闭</button> </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-dispose">
+    <div class="modal-data">
+        <p class="modal-data_title">处理</p>
+
+        <div class="formbtnc">
+            <textarea class=".formbtnct" rows="3" cols="20" style="width:100%;height:150px;resize: none"
+                      id="disposeData"></textarea>
+            <input type="hidden" id="teamId"/>
+            <input type="hidden" id="recordId"/>
+
+            <div class="formbtn modal-formbtn">
+                <p><span> <button onclick="disposeText()">提交</button> <button onclick="dispose()">关闭</button> </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹出框 -->
+<script type="text/javascript">
+    var request = {
+        QueryString: function (val) {
+            var uri = window.location.search;
+            var re = new RegExp("" + val + "=([^&?]*)", "ig");
+            return ((uri.match(re)) ? (uri.match(re)[0].substr(val.length + 1)) : null);
+        }
+    };
+    var date = new Date();
+    var month = date.getMonth() + 1 + "";
+    var dateDay = date.getDate() + "";
+    if (month.length == 1) {
+        month = "0" + month;
+    }
+    if (dateDay.length == 1) {
+        dateDay = "0" + dateDay;
+    }
+    var time = date.getFullYear() + "-" + month + "-" + dateDay;
+    var caseId = request.QueryString("caseId");
+    function timeLineUlShow() {
+        queryColour();
+        $("#timeLineUl").empty();
+        if (caseId != "") {
+            $.ajax({
+                type: "GET",
+                url: '/caseRecords/queryByCaseId.do',
+                data: {
+                    caseId: caseId
+                },
+                success: function (data) {
+                    if (data != null) {
+                        var recordses = data.recordses;
+                        var onlineUser = data.onlineUser;
+                        for (var i = 0; i < recordses.length; i++) {
+                            if (recordses[0].lineId == "无" && recordses[0].finishFlag == 1 && recordses[0].caseState == "结束") {
+                                if (recordses[i].finishFlag == 1 && recordses[i].lineId == "无" && recordses[i].caseState == "结束") {
+                                    $("#timeLineUl").append(
+                                            '<li class="cls highlight">' +
+                                            '<p class="date">' + recordses[i].createTime + '</p>' +
+                                            '<p class="intro" style="background-color: ' + recordses[i].color + '">案件结束 公布案件结果！</p>' +
+                                            '<p class="version">&nbsp;</p>' +
+                                            '</li>'
+                                    );
+                                }
+                                if (recordses[i].caseState == "退回") {
+                                    $("#timeLineUl").append(
+                                            '<li class="cls" id="noOrYes">' +
+                                            '<p class="date">' + recordses[i].createTime + '</p>' +
+                                            '<div class="intro intro-top" style="background-color: ' + recordses[i].color + '">' +
+                                            '<p class="formbtn"  style="border-top:1px solid #B3B3B3;border-bottom:1px solid #B3B3B3;">拒绝部门:' + recordses[i].createTeam + '</p>' +
+                                            '<div class="formbtn"><span>' + recordses[i].caseLog + '</span>' +
+                                            '</div>' +
+                                            '</div> <p class="version">&nbsp;</p>' +
+                                            '</li>'
+                                    );
+                                }
+                                if (recordses[i].finishFlag == 0 && recordses[i].lineId == "无" && recordses[i].caseState == "开始") {
+                                    $("#timeLineUl").append(
+                                            '<li class="cls highlight">' +
+                                            '<p class="date">' + recordses[i].createTime + '</p>' +
+                                            '<p class="intro"  style="background-color: ' + recordses[i].color + '">案件开始！</p>' +
+                                            '<p class="version">&nbsp;</p>' +
+                                            '</li>'
+                                    );
+                                }
+                                if (recordses[i].lineId != "无") {
+                                    $("#timeLineUl").append(
+                                            '<li class="cls">' +
+                                            '<p class="date">' + recordses[i].createTime + '</p>' +
+                                            '<div class="intro intro-bottom" style="background-color: ' + recordses[i].color + '">' +
+                                            '<p> ' + recordses[i].createTeam + ' </p>' +
+                                            '<p class="forminfoc"> <span>受理人：' + recordses[i].casePersonName + '</span>' +
+//                                            '</span> <span class="forminfoc-tel">联系电话:' + onlineUser[i].telephone + '</span>'+
+                                            '</p>' +
+                                            '<div class="formbtnc">' +
+                                            '<div disabled="disabled"> ' + recordses[i].caseLog + ' </div>' +
+                                            '</div>' +
+                                            '</div>' +
+                                            '<p class="version">&nbsp;</p>' +
+                                            '</li>'
+                                    );
+                                }
+                            } else {
+                                if (recordses[i].finishFlag == 0 && recordses[i].lineId == "无" && recordses[i].caseState == "开始") {
+                                    $("#timeLineUl").append(
+                                            '<li class="cls highlight">' +
+                                            '<p class="date">' + recordses[i].createTime + '</p>' +
+                                            '<p class="intro" style="background-color: ' + recordses[i].color + '">案件开始！</p>' +
+                                            '<p class="version">&nbsp;</p>' +
+                                            '</li>'
+                                    );
+                                } else {
+                                    if (recordses[i].caseState == "退回") {
+                                        if (onlineUser.depCName == recordses[i].addMessage1 && i == 0) {
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls" id="noOrYes">' +
+                                                    '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                    '<div class="intro intro-top" style="background-color: ' + recordses[i].color + '">' +
+                                                    '<p class="formbtn"  style="border-top:1px solid #B3B3B3;border-bottom:1px solid #B3B3B3;">拒绝部门:' + recordses[i].createTeam + '</p>' +
+                                                    '<div class="formbtn"><span>' + recordses[i].caseLog + '</span>' +
+                                                    '<p>' +
+                                                    '<span>' +
+                                                    '<button onclick="backSave()">继续受理</button>' +
+                                                    '</span>' +
+                                                    '</p>' +
+                                                    '</div>' +
+                                                    '</div> <p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        } else {
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls" id="noOrYes">' +
+                                                    '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                    '<div class="intro intro-top" style="background-color: ' + recordses[i].color + '">' +
+                                                    '<p class="formbtn"  style="border-top:1px solid #B3B3B3;border-bottom:1px solid #B3B3B3;">拒绝部门:' + recordses[i].createTeam + '</p>' +
+                                                    '<div class="formbtn"><span>' + recordses[i].caseLog + '</span>' +
+                                                    '</div>' +
+                                                    '</div> <p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        }
+                                    }
+                                    if (recordses[0].finishFlag == 0) {
+                                        if (onlineUser.depCName == data.addMessage1 && recordses[i].createTime == time && onlineUser.depCName == recordses[i].createTeam && recordses[0].finishFlag == 0 && i == 0) {
+                                            $("#teamId").html(recordses[i].caseLog);
+                                            $("#recordId").val(recordses[i].id);
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls">' +
+                                                    '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                    '<div class="intro intro-bottom" style="background-color: ' + recordses[i].color + '">' +
+                                                    '<p> ' + recordses[i].createTeam + '</p>' +
+                                                    '<p class="forminfoc"> <span>受理人：' + recordses[i].casePersonName + '</span> </p>' +
+                                                    '<div class="formbtnc">' +
+                                                    '<div disabled="disabled"> ' + recordses[i].caseLog + ' </div>' +
+                                                    '<p style="background-color: ' + recordses[i].color + '">' +
+                                                    '<span class="formbtnc-spant">' +
+                                                    '<button onclick="dispose()">处理</button>' +
+                                                    '<button class="btn-r">加速</button>' +
+                                                    '</span>' +
+                                                    '<span class="formbtnc-spanb">' +
+                                                    '<button onclick="processingComplete()">处理完成</button>' +
+                                                    '</span>' +
+                                                    '</p>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '<p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        } else if (onlineUser.depCName != data.addMessage1 && recordses[0].finishFlag == 0) {
+                                            if (recordses[i].caseState != "退回") {
+                                                $("#timeLineUl").append(
+                                                        '<li class="cls">' +
+                                                        '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                        '<div class="intro intro-bottom" style="background-color: ' + recordses[i].color + '">' +
+                                                        '<p> ' + recordses[i].createTeam + ' </p>' +
+                                                        '<p class="forminfoc"> <span>受理人：' + recordses[i].casePersonName + '</span>' +
+//                                            '</span> <span class="forminfoc-tel">联系电话:' + onlineUser[i].telephone + '</span>'+
+                                                        '</p>' +
+                                                        '<div class="formbtnc">' +
+                                                        '<div disabled="disabled"> ' + recordses[i].caseLog + ' </div>' +
+                                                        '</div>' +
+                                                        '</div>' +
+                                                        '<p class="version">&nbsp;</p>' +
+                                                        '</li>'
+                                                );
+                                            }
+                                        } else if (onlineUser.depCName != data.addMessage1 && recordses[i].createTime == time && onlineUser.depCName == recordses[i].createTeam) {
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls">' +
+                                                    '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                    '<div class="intro intro-bottom" style="background-color: ' + recordses[i].color + '">' +
+                                                    '<p> ' + recordses[i].createTeam + ' </p>' +
+                                                    '<p class="forminfoc"> <span>受理人：' + recordses[i].casePersonName + '</span>' +
+//                                            '</span> <span class="forminfoc-tel">联系电话:' + onlineUser[i].telephone + '</span>'+
+                                                    '</p>' +
+                                                    '<div class="formbtnc">' +
+                                                    '<div disabled="disabled"> ' + recordses[i].caseLog + ' </div>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '<p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        }
+                                        else if (onlineUser.depCName == data.addMessage1 && recordses[0].finishFlag == 0) {
+                                            if (recordses[i].createTime != time && i == 0) {
+                                                $("#timeLineUl").append(
+                                                        '<li class="cls" id="noOrYes">' +
+                                                        '<p class="date">' + time + '</p>' +
+                                                        '<div class="intro intro-top">' +
+                                                        '<p>' + onlineUser.depCName + '</p>' +
+                                                        '<p class="forminfo">流程为(' + recordses[0].caseState + '),请继续受理!</p>' +
+                                                        '<div class="formbtn">' +
+                                                        '<p>' +
+                                                        '<span>' +
+                                                        '<button onclick="continueSave()">继续受理</button>' +
+                                                        '</span>' +
+                                                        '</p>' +
+                                                        '</div>' +
+                                                        '</div> <p class="version">&nbsp;</p>' +
+                                                        '</li>'
+                                                );
+                                            }
+                                            if (recordses[i].caseState != "退回") {
+                                                $("#timeLineUl").append(
+                                                        '<li class="cls">' +
+                                                        '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                        '<div class="intro intro-bottom" style="background-color: ' + recordses[i].color + '">' +
+                                                        '<p> ' + recordses[i].createTeam + ' </p>' +
+                                                        '<p class="forminfoc"> <span>受理人：' + recordses[i].casePersonName + '</span>' +
+//                                            '</span> <span class="forminfoc-tel">联系电话:' + onlineUser[i].telephone + '</span>'+
+                                                        '</p>' +
+                                                        '<div class="formbtnc">' +
+                                                        '<div disabled="disabled"> ' + recordses[i].caseLog + ' </div>' +
+                                                        '</div>' +
+                                                        '</div>' +
+                                                        '<p class="version">&nbsp;</p>' +
+                                                        '</li>'
+                                                );
+                                            }
+                                        }
+                                    }
+                                    if (recordses[0].finishFlag == 1 && recordses[0].caseState != "结束") {
+                                        if (onlineUser.depCName == recordses[0].nextOrg && recordses[i].finishFlag == 1 && i == 0) {
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls" id="noOrYes">' +
+                                                    '<p class="date">' + time + '</p>' +
+                                                    '<div class="intro intro-top">' +
+                                                    '<p>' + onlineUser.depCName + '</p>' +
+                                                    '<p class="forminfo">是否开始受理(' + recordses[0].nextLine + ')</p>' +
+                                                    '<div class="formbtn">' +
+                                                    '<p>' +
+                                                    '<span>' +
+                                                    '<button onclick="overlay()">拒绝处理</button>' +
+                                                    '<button onclick="nextSave(\'' + data.nowLine + '\')">开始受理</button>' +
+                                                    '</span>' +
+                                                    '</p>' +
+                                                    '</div>' +
+                                                    '</div> <p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        }
+                                        if (onlineUser.depCName != recordses[0].nextOrg && i == 0 && recordses[0].caseState != "退回") {
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls" id="noOrYes">' +
+                                                    '<p class="date">' + time + '</p>' +
+                                                    '<div class="intro intro-top">' +
+                                                    '<p>负责部门:' + recordses[0].nextOrg + '</p>' +
+                                                    '<p class="forminfo">流程已到(' + recordses[0].nextLine + ')!</p>' +
+                                                    '<div class="formbtn">' +
+                                                    '<p>' +
+                                                    '<span>' +
+                                                    '</span>' +
+                                                    '</p>' +
+                                                    '</div>' +
+                                                    '</div> <p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        }
+                                        if (recordses[i].lineId == data.nowLine) {
+                                            $("#timeLineUl").append(
+                                                    '<li class="cls">' +
+                                                    '<p class="date">' + recordses[i].createTime + '</p>' +
+                                                    '<div class="intro intro-bottom" style="background-color: ' + recordses[i].color + '">' +
+                                                    '<p> ' + recordses[i].createTeam + ' </p>' +
+                                                    '<p class="forminfoc"> <span>受理人：' + recordses[i].casePersonName + '</span>' +
+//                                            '</span> <span class="forminfoc-tel">联系电话:' + onlineUser[i].telephone + '</span>'+
+                                                    '</p>' +
+                                                    '<div class="formbtnc">' +
+                                                    '<div disabled="disabled"> ' + recordses[i].caseLog + ' </div>' +
+                                                    '</div>' +
+                                                    '</div>' +
+                                                    '<p class="version">&nbsp;</p>' +
+                                                    '</li>'
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (recordses.length == 0) {
+                            if (data.isStart) {
+                                $("#timeLineUl").append(
+                                        '<li class="cls" id="noOrYes">' +
+                                        '<p class="date">' + time + '</p>' +
+                                        '<div class="intro intro-top">' +
+                                        '<p>' + onlineUser.depCName + '</p>' +
+                                        '<p class="forminfo">案件为(' + data.caseName + '),是否开始受理该案件</p>' +
+                                        '<div class="formbtn">' +
+                                        '<p>' +
+                                        '<span>' +
+                                        '<button onclick="refuseAccept()">暂不受理</button>' +
+                                        '<button onclick="saveCaseList(\'' + recordses.length + '\')">开始受理</button>' +
+                                        '</span>' +
+                                        '</p>' +
+                                        '</div>' +
+                                        '</div> <p class="version">&nbsp;</p>' +
+                                        '</li>'
+                                );
+                            }
+                        }
+                    }
+                },
+                // 调用出错执行的函数
+                error: function () {
+                }
+            });
+        }
+    }
+
+    function overlay() {
+        $("#overlayData").val("");
+        var e1 = document.getElementById('modal-overlay');
+        e1.style.visibility = (e1.style.visibility == "visible") ? "hidden" : "visible";
+    }
+    function dispose() {
+        $("#disposeData").val("");
+        $("#disposeData").val($("#teamId").html());
+        var e1 = document.getElementById('modal-dispose');
+        e1.style.visibility = (e1.style.visibility == "visible") ? "hidden" : "visible";
+    }
+    function saveCaseList(size) {
+        $.ajax({
+            type: "GET",
+            url: '/caseRecords/saveRecord.do',
+            data: {
+                caseId: caseId,
+                size: size
+            },
+            success: function (data) {
+                timeLineUlShow();
+            },
+            error: function () {
+
+            }
+        });
+
+    }
+
+    function disposeText() {
+        var caseLog = $("#disposeData").val();
+        var id = $("#recordId").val();
+        $.ajax({
+            type: "POST",
+            url: '/caseRecords/saveOrUpdateRecord.do',
+            data: {
+                id: id,
+                caseId: caseId,
+                caseLog: caseLog
+            },
+            success: function (data) {
+                dispose();
+                timeLineUlShow();
+            },
+            // 调用出错执行的函数
+            error: function () {
+            }
+        });
+    }
+    function continueSave() {
+        $.ajax({
+            type: "POST",
+            url: '/caseRecords/saveOrUpdateRecord.do',
+            data: {
+                caseId: caseId
+            },
+            success: function (data) {
+                timeLineUlShow();
+            },
+            // 调用出错执行的函数
+            error: function () {
+            }
+        });
+    }
+
+    function backSave() {
+        $.ajax({
+            type: "POST",
+            url: '/caseRecords/saveOrUpdateRecord.do',
+            data: {
+                caseId: caseId,
+                backId: 1
+            },
+            success: function (data) {
+                timeLineUlShow();
+            },
+            // 调用出错执行的函数
+            error: function () {
+            }
+        });
+    }
+
+    function processingComplete() {
+        var id = $("#recordId").val();
+        $.ajax({
+            type: "POST",
+            url: '/caseRecords/save.do',
+            data: {
+                id: id,
+                finishFlag: 1
+            },
+            success: function (data) {
+                timeLineUlShow();
+            },
+            // 调用出错执行的函数
+            error: function () {
+            }
+        });
+    }
+
+    function nextSave(nowLine) {
+        $.ajax({
+            type: "GET",
+            url: '/caseRecords/saveRecord.do',
+            data: {
+                caseId: caseId,
+                nowLine: nowLine,
+                size: -1
+            },
+            success: function (data) {
+                timeLineUlShow();
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function overlayText() {
+        var caseLog = $("#overlayData").val();
+        $.ajax({
+            type: "POST",
+            url: '/caseRecords/back.do',
+            data: {
+                caseId: caseId,
+                caseLog: caseLog
+            },
+            success: function (data) {
+                overlay();
+                timeLineUlShow();
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function refuseAccept() {
+        $.ajax({
+            type: "POST",
+            url: '/caseInfo/save.do',
+            data: {
+                id: caseId,
+                delFlag: 2
+            },
+            success: function (data) {
+                var win = window.parent.Ext.getCmp("timeLine");
+                win.up().close();
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function queryColour() {
+        $.ajax({
+            type: "GET",
+            url: '/caseRecords/queryColour.do',
+            success: function (data) {
+                $("#showColour").empty();
+                for (var i = 0; i < data.object.length; i++) {
+                    $("#showColour").append(
+                            '<div class="newsColourCss" style="background-color: '+data.object[i].infoColour+'"></div>' +
+                            '<div class="newsFontCss" style="color: '+data.object[i].infoColour+'">'+data.object[i].infoColourType+'</div>'
+                    );
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+buttonsManager----按钮管理
+dict----字典管理
+dictionaryManager---原有字典管理（已过期，不使用）
+moduleManager----菜单管理
+organizationManager----机构管理
+permissionManager----权限管理
+personInfoManager----人员管理
+personRoleRelation----人员权限
+roleManager----角色管理
+roleModuleRelation----角色权限

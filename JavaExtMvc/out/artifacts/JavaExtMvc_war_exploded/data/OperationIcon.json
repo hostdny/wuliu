@@ -1,0 +1,8 @@
+﻿{
+    "operationIcons": [
+		{ "iconCls": "OperaionLook", "text": "查看" },
+		{ "iconCls": "OperaionDelete", "text": "删除" },
+		{ "iconCls": "OperaionArrowUp", "text": "上移" },
+		{ "iconCls": "OperaionArrowDown", "text": "下移" }
+	]
+}

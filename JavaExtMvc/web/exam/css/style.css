@@ -1,0 +1,232 @@
+/* CSS Document */
+*{margin: 0;padding: 0}
+body {
+	font-family:Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	color: #333;
+}
+a:link {
+	color: #666;
+	text-decoration: none;	
+}
+a:visited {
+	color: #666;
+	text-decoration: none;	
+}
+a:hover {
+	color: #C00;
+	text-decoration: none;	
+}
+ul,ol,li {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;	
+}
+dl,dt,dd {
+	margin: 0;
+	padding: 0;
+}
+img {
+	border: 0;	
+}
+br {
+	font-size: 0;
+	line-height: 10px;
+	height: 10px;
+}
+
+/* 头部 */
+.top {
+	width: 1080px;
+	height: 90px;
+	margin: 0 auto;
+	background: url(../images/toplogo.png) no-repeat left center;	
+}
+.top-ksxt{
+	width: 1080px;
+	height: 90px;
+	margin: 0 auto;
+	background: url(../images/bg-ks.png) no-repeat left center;
+}
+.top ul {
+	height: 90px;
+	line-height: 90px;
+	float: right;
+}
+.top ul li {
+	float: left;
+	margin-left: 30px;
+	font-weight: bold;
+}
+.top ul li a.hover {
+	color: #F60;
+}
+.top ul li a.hover:hover {
+	color: #C00;
+}
+
+/* 登录主体 */
+.main {
+	height: 520px;
+	background: url(../images/tp02.png) repeat-x;
+}
+.main .denglu {
+	width: 1280px;
+	height: 520px;
+	background: url(../images/pic01.jpg) no-repeat;
+	margin: 0 auto;
+	position: relative;
+}
+.main .denglu .text {
+	width: 450px;
+	position: absolute;
+	left: 260px;
+	top: 250px;
+	line-height: 26px;
+}
+.text{font-size:13px;}
+.main .denglu .dlk {
+	width: 354px;
+	height: 328px;
+	background: url(../images/tp03_20140320.png) no-repeat;
+	position: absolute;
+	right: 180px;
+	top: 120px;
+	color: #999;
+}
+
+.main .denglu .dlk a.mm {
+	color: #000;
+	font-size: 12px;
+}
+.main .denglu .dlk a.mm:hover {
+	color: #C00;
+}
+.main .denglu .dlk a.zc {
+	color: #F60;
+}
+.main .denglu .dlk a.zc:hover {
+	color: #C00;
+}
+
+/* 登录底部 */
+.footer {
+	font-size: 13px;
+	height: 70px;
+	line-height:70px;
+	text-align: center;
+	color: #666;	
+}
+
+/* button,input */
+.dlinput {
+	margin: 0;
+	padding: 0;
+	border: 1px solid #ccc;
+	width: 222px;
+	height: 34px;
+	line-height: 34px;
+	text-indent: 2px;
+	font-size: 14px;
+	
+}
+.loginbtn {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background: url(../images/tp06_20140320.png) no-repeat;
+	border: none 0;
+	width: 224px;
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	font-family: "微软雅黑";
+	font-size: 16px;
+	color: #FFF;
+	padding: 0;
+	margin: 0;
+}
+.loginbtnb{	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	/*background: url(../images/tp06_20140320.png) no-repeat;*/
+	background-color:#c8d9e4;
+	border: none 0;
+	width: 80px;
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	font-family: "微软雅黑";
+	font-size: 16px;
+	color: #191919;
+	padding: 0;
+	margin: 0;}
+.loginbtnb:hover, .loginbtnb:focus {
+	/*background: url(../images/tp07_20140320.png) no-repeat;*/
+	background-color: #0272bd;
+	color: #fff
+}
+.loginbtnb:active {
+	color: #ccc;
+}
+.loginbtn:hover, .loginbtn:focus {
+	background: url(../images/tp07_20140320.png) no-repeat;
+}
+.loginbtn:active {
+	color: #ccc;
+}
+.zc{font-size:13px;}
+
+/*考试题目*/
+.main-info{width:1080px;height: 350px;position:relative;margin:0 auto;}
+.left{width: 270px;min-height:600px;float:left;margin-right: 8px;border:1px solid #23518c}
+.left-top{background-color:#2b5891; color: white;font-size:20px;text-align:center;height:50px;line-height:50px}
+.left-top1{background-color:#f3f3f3;font-size:12px;text-align:center;height:60px;line-height:30px}
+.left-tm{background-color:#eef5fb;width:100%;height:40px;line-height:40px;margin-top: 2px}
+.left-tm p{padding-left: 10px;color: #2574ac}
+
+.center{width:798px;height:600px;float: left;position: relative;border:1px solid #23518c}
+.left-top p{display:inline-block;font-size:14px;margin-left:20px}
+.left-top p span{color: red}
+.center-tm{position: relative}
+.center-tm p{margin:20px 10px;color:#2574ac;font-size:20px}
+.center-xx{background-color:#f8f8f8; padding:10px 5px}
+.center-da{margin:20px 10px}
+.center-da p{font-size:18px}
+.center-da p span{color:green;}
+.center-bottom{width:100%;height:120px;border-top:1px solid #c8dae6; background-color:#F6FAFD;position: absolute;bottom:0;left:0;padding-top:10px}
+.center-bottom-btn{margin:10px}
+.center-bottom-btn span{color: red;margin-left:20px}
+.lbtn{float: right;margin-right:15px}
+.center-bottom-btn{margin:10px}
+.center-first span{color:#2574ac;float:left;margin-top:10px}
+.center-first span{margin-right: 20px}
+.center-secend{float:right;margin-right:15px}
+.margin-right10{margin-right: 10px}
+
+
+
+.left-kt {padding: 0 5px;overflow-y: auto;height: 140px}
+.left-kt ul li{display: inline-block;color: red;text-align: center;width: 18%;margin: 10px 0;}
+.left-kt ul li a{color: #fff;display: block;width: 25px;height: 25px;background-color:  red;line-height: 25px}
+.left-kt ul{padding-left: 20px}
+
+.center-xx label{ display: block; margin: 10px 20px;font-size: 18px;color: #3a3a3a }
+.center-xx label input{margin: 0 20px}
+.center-bottom-btn button{padding: 5px 10px;background-color: #eff6fe;color: #000;font-size: 18px;margin-right: 10px}
+.center-bottom-btn p span{margin-right: 10px; font-size: 18px}
+.center-xx-dx label{display: block; margin: 10px 20px;font-size: 18px;color: #3a3a3a}
+.center-xx-dx label input{margin: 0 20px}
+.center-xx-dx{background-color:#f8f8f8; padding:10px 5px}
+
+
+
+
+
+
+
+.main-info table td{font-size: 16px ;font-weight: bold; text-align: center;color: #666}
